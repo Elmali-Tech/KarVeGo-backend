@@ -29,7 +29,7 @@ app.use(express.json());
 // Sürat Kargo API bilgileri
 const SURAT_KARGO_API_URL = "https://api01.suratkargo.com.tr";
 const SURAT_KARGO_USERNAME = "1472651760";
-const SURAT_KARGO_PASSWORD = "Karvego.123!";
+const SURAT_KARGO_PASSWORD = "Kargo.2025";
 
 // Alan uzunluk sınırlamaları
 const FIELD_LENGTH_LIMITS = {
