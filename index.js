@@ -12,14 +12,16 @@ const port = process.env.PORT || 3000;
 app.use(
   cors({
     origin: [
-      "http://localhost:5173", 
-      "https://your-production-domain.com",
-      "https://karvego-874729167381.europe-west1.run.app", 
+      "http://localhost:5173", // local geliştirme
+      "https://karvego.com",   // kendi domaininiz
+      "https://www.karvego.com", // www versiyonu da varsa
+      "https://karvego-874729167381.europe-west1.run.app",
       "https://karvego-backend-900677923244.europe-west1.run.app",
       "https://stopping-prospective-unity-standards.trycloudflare.com"
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
 
