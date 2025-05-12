@@ -9,17 +9,17 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-// CORS ayarları
 app.use(
   cors({
     origin: [
       "http://localhost:5173", 
       "https://your-production-domain.com",
       "https://karvego-874729167381.europe-west1.run.app", 
-      "https://karvego-backend-900677923244.europe-west1.run.app"
+      "https://karvego-backend-900677923244.europe-west1.run.app",
+      "https://stopping-prospective-unity-standards.trycloudflare.com"
     ],
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
   })
 );
 
