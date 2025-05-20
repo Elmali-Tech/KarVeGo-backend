@@ -249,6 +249,45 @@ function isValidIstanbulDistrict(district) {
   return validDistricts.includes(district);
 }
 
+
+app.post('/api/surat-kargo/cancel-label', async (req, res) => {
+  try {
+    const { trackingNumber } = req.body;
+    console.log('Etiket iptal isteği alındı:', { trackingNumber });
+    
+    const apiUrl = `https://api01.suratkargo.com.tr/api/GonderiSil?CariKodu=1472651760&Sifre=kARGO.2025&WebSiparisKodu=${trackingNumber}`;
+    console.log('Sürat Kargo API isteği:', { url: apiUrl });
+    
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    console.log('Sürat Kargo API yanıtı:', { 
+      status: response.status, 
+      statusText: response.statusText 
+    });
+
+    const data = await response.json();
+    console.log('Sürat Kargo API yanıt verisi:', data);
+    
+    if (!response.ok) {
+      throw new Error(data.Message || 'Etiket iptal edilirken bir hata oluştu');
+    }
+
+    res.json({ success: true, message: 'Etiket başarıyla iptal edildi' });
+  } catch (error) {
+    console.error('Sürat Kargo etiket iptal hatası:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: error instanceof Error ? error.message : 'Etiket iptal edilirken bir hata oluştu' 
+    });
+  }
+});
+
+
 // Server'ı başlat
 app.listen(port, () => {
   console.log(`Karvego API Proxy Server şu portta çalışıyor: ${port}`);
