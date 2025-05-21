@@ -32,6 +32,8 @@ app.use(express.json());
 const SURAT_KARGO_API_URL = "https://api01.suratkargo.com.tr";
 const SURAT_KARGO_USERNAME = "1472651760";
 const SURAT_KARGO_PASSWORD = "Kargo.2025";
+const SURAT_KARGO_CANCEL_CARI_KODU = "1472651760";
+const SURAT_KARGO_CANCEL_PASSWORD = "kARGO.2025";
 
 // Alan uzunluk sınırlamaları
 const FIELD_LENGTH_LIMITS = {
@@ -49,7 +51,7 @@ app.get("/", (req, res) => {
   res.send("Karvego API Proxy Server çalışıyor");
 });
 
-// Sürat Kargo Barkod Oluşturma endpoint'i
+// Sürat Kargo ortak Barkod Oluşturma endpoint'i
 app.post("/api/surat-kargo/barkod-olustur", async (req, res) => {
   try {
     console.log("Sürat Kargo isteği alındı:", {
@@ -255,7 +257,7 @@ app.post('/api/surat-kargo/cancel-label', async (req, res) => {
     const { trackingNumber } = req.body;
     console.log('Etiket iptal isteği alındı:', { trackingNumber });
     
-    const apiUrl = `https://api01.suratkargo.com.tr/api/GonderiSil?CariKodu=1472651760&Sifre=kARGO.2025&WebSiparisKodu=${trackingNumber}`;
+    const apiUrl = `${SURAT_KARGO_API_URL}/api/GonderiSil?CariKodu=${SURAT_KARGO_CANCEL_CARI_KODU}&Sifre=${SURAT_KARGO_CANCEL_PASSWORD}&WebSiparisKodu=${trackingNumber}`;
     console.log('Sürat Kargo API isteği:', { url: apiUrl });
     
     const response = await fetch(apiUrl, {
