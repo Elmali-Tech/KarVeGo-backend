@@ -287,6 +287,21 @@ app.post('/api/surat-kargo/cancel-label', async (req, res) => {
   }
 });
 
+// GDPR webhook endpoints for Shopify App
+app.post('/gdpr/customer-data-request', (req, res) => {
+  console.log('GDPR Customer Data Request:', req.body);
+  res.status(200).json({ success: true });
+});
+
+app.post('/gdpr/customer-erasure', (req, res) => {
+  console.log('GDPR Customer Erasure Request:', req.body);
+  res.status(200).json({ success: true });
+});
+
+app.post('/gdpr/shop-erasure', (req, res) => {
+  console.log('GDPR Shop Erasure Request:', req.body);
+  res.status(200).json({ success: true });
+});
 
 // Server'ı başlat
 app.listen(port, () => {
