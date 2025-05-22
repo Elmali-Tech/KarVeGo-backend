@@ -2,12 +2,14 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import axios from "axios";
+import crypto from "crypto";
 
 // .env dosyasını yükle
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+const SHOPIFY_WEBHOOK_SECRET = "918f092b39dfb13f4c36b2eb781ad044";
 
 app.use(
   cors({
@@ -300,8 +302,25 @@ app.post('/gdpr/customer-erasure', (req, res) => {
   res.status(200).json({ success: true });
 });
 
+function verifyShopifyHmac(req, secret) {
+  const hmacHeader = req.get('X-Shopify-Hmac-Sha256') || '';
+  const body = JSON.stringify(req.body);
+  const hash = crypto
+    .createHmac('sha256', secret)
+    .update(body, 'utf8')
+    .digest('base64');
+  return crypto.timingSafeEqual(Buffer.from(hmacHeader, 'utf8'), Buffer.from(hash, 'utf8'));
+}
+
 app.post('/gdpr/shop-erasure', (req, res) => {
-  console.log('GDPR Shop Erasure Request:', req.body);
+  const isValid = verifyShopifyHmac(req, process.env.SHOPIFY_WEBHOOK_SECRET);
+
+  if (!isValid) {
+    console.warn("Invalid HMAC for /gdpr/shop-erasure");
+    return res.status(401).send("Unauthorized");
+  }
+
+  console.log('Valid GDPR Shop Erasure Request:', req.body);
   res.status(200).json({ success: true });
 });
 
